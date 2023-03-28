@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="diaryMapper">
+	<resultMap type="diary" id="diaryResultSet">
+		<result column="diary_no" property="diaryNo"></result>
+		<result column="create_date" property="createDate"></result>
+		<result column="diary_category" property="diaryCategory"></result>
+		<result column="diary_content" property="diaryContent"></result>
+		<result column="status" property="status"></result>
+		<result column="mem_no" property="memNo"></result>
+		<result column="diary_thumbnail" property="diaryThumbnail"></result>
+		<result column="nickname" property="nickName"></result>				
+	</resultMap>	
+
+	<resultMap type="diary" id="diaryNickNameResultSet">
+		<result column="diary_no" property="diaryNo"></result>
+		<result column="create_date" property="createDate"></result>
+		<result column="diary_category" property="diaryCategory"></result>
+		<result column="diary_content" property="diaryContent"></result>
+		<result column="status" property="status"></result>
+		<result column="mem_no" property="memNo"></result>
+		<result column="diary_thumbnail" property="diaryThumbnail"></result>
+		<result column="nickname" property="nickName"></result>				
+	</resultMap>	
+	
+	<resultMap type="attachment" id="attachmentResultSet">
+		<result column="file_no" property="fileNo"></result>
+		<result column="origin_name" property="originName"></result>
+		<result column="change_name" property="changeName"></result>
+		<result column="file_level" property="fileLevel"></result>
+		<result column="upload_date" property="uploadDate"></result>
+		<result column="board_no" property="boardNo"></result>
+		<result column="board_type" property="boardType"></result>						
+	</resultMap>
+	
+
+
+
+	<select id="selectCategoryList" parameterType="_int" resultMap="diaryResultSet">	
+	select 
+			distinct diary_category
+	from
+			diary
+	where
+			mem_no = #{memNo}
+	</select>
+
+	<select id="selectDiaryList" parameterType="diary" resultMap="diaryResultSet">
+
+<![CDATA[
+	select
+			diary_no, TO_CHAR(create_date, 'YYYY-MM-DD') "CREATE_DATE", diary_category, diary_content, diary.status, diary.mem_no, diary_thumbnail, member.nickname
+	from
+			diary
+	join 	member
+	
+ 	on	(member.mem_no=diary.mem_no)	
+ 	
+ 	where
+			create_date >= #{startDate}
+    
+    and     create_date-1 <= #{endDate}
+	
+	and
+			diary.mem_no = ${memNo}
+	and
+			diary.status = 'Y'
+	]]>	
+	<!-- date로 값을 넘긴 후 대소비교를 하려고 하니 실제 입력한 마지막 날짜+1로 조회를 해야 마지막날 값이 select 됨... 그래서 createDate-1로 조회 -->
+	
+		<if test="diaryCategory !='noCategory' and diaryCategory !='selectAll'">
+			and diary_category = #{diaryCategory}		
+		</if>
+	
+	</select>
+	
+	<select id="selectDiary" parameterType="_int" resultMap="diaryResultSet">
+	select
+			diary_no, TO_CHAR(create_date, 'YYYY-MM-DD') "CREATE_DATE", diary_category, diary_content, diary.status, diary.mem_no, diary_thumbnail, member.nickname
+	from
+			diary
+	join 	member
+	
+ 	on	(member.mem_no=diary.mem_no) 
+	where
+			diary_no = #{diaryNo}
+	and
+			diary.status= 'Y'
+	</select>
+	
+	
+	<select id="selectAttachmentList" parameterType="_int" resultMap="attachmentResultSet">
+	select	*
+	from
+			attachment
+	where
+			board_no = #{dirayNo}
+	and
+			board_type = 'D'
+	and
+			attachment.status = 'Y'					
+			
+	</select>
+	
+	
+	
+	
+	
+	<insert id="insertAttachment" parameterType="attachment">
+	insert
+	into
+			attachment
+			(
+			file_no, 
+			origin_name, 
+			change_name, 
+			upload_date, 
+			board_no, 
+			board_type, 
+			status			
+			)
+	values 
+			( seq_ano.nextval, 
+			  #{originName},
+			  #{changeName},
+			  sysdate,
+			  
+		<choose>
+			<when test="boardNo !=0">
+				#{boardNo}, 
+			</when>
+			<otherwise>
+			  seq_dno.currval,
+			</otherwise>
+		</choose>	
+			  #{boardType},
+			  'Y'
+			)
+	
+	</insert>	
+	<insert id="insertDiary" parameterType="diary">
+	insert
+	into
+			diary
+	values 
+			( seq_dno.nextval, 			
+			  sysdate,
+			  #{diaryCategory},
+			  #{diaryContent},
+			  'Y',
+			  #{memNo}
+		<choose>
+			<when test="diaryThumbnail !=null">
+					  , #{diaryThumbnail} )
+			</when>
+			<otherwise>
+					, null )
+			</otherwise>
+		</choose>
+	</insert>
+		
+	<update id="updateDiary" parameterType="diary">
+	update
+			diary
+	set
+			create_date = #{createDate}, 
+			diary_category = #{diaryCategory},
+			diary_content = #{diaryContent}
+			
+
+	<if test="diaryThumbnail !=null">
+			, diary_thumbnail = #{diaryThumbnail}
+	</if>
+	where
+			diary_no  = #{diaryNo}	
+	</update>
+	<update id="updateAttachment" parameterType="attachment">
+	update
+			attachment
+	set
+			origin_name = #{originName},
+			change_name = #{changeName}
+	where
+			file_no = #{fileNo}
+	</update>
+	<update id="deleteDiary" parameterType="_int">
+	update
+			diary
+	set	
+			status= 'N'
+	where		
+			diary_no  = #{diaryNo}	
+	</update>
+	<update id="deleteAttachment" parameterType="_int">
+	update
+			attachment
+	set
+			status = 'N'
+	where
+			board_no = #{diaryNo}
+
+	</update>
+	
+	<select id="selectCalEvent" parameterType="_int" resultType="diaryCalendar">
+	select 
+			diary_no as "id", 
+			diary_category as "title", 
+			create_date as "start", 
+			create_date as "end",
+			'true' as "allDay" ,
+			'#fbc02d' as "color" 
+	from diary
+	where
+			mem_no = #{memNo}
+	and
+			diary.status ='Y'
+	
+	</select>
+	
+	<select id="selectListCount" parameterType="diary" resultType="_int">
+	select
+				count(*)
+	      from
+	      		diary
+	      where
+	      		status= 'Y'
+	      and
+	      		mem_no = #{memNo}
+	      		
+	   	<if test="diaryCategory !='noCategory' and diaryCategory !='selectAll'">
+			and diary_category = #{diaryCategory}		
+		</if>
+			
+	 </select>     	
+	 
+	 <update id="deleteCheckedAccountNo">
+			update 
+ 		  		diary
+ 		  set
+ 		  		status = 'N'
+ 		  where
+ 		  		diary_no in
+ 		  		<foreach collection="list" item="item" open="(" close=")" separator=",">
+ 		  		 #{item}
+ 		  		</foreach> 
+	</update>
+	<update id="deleteCheckedAttachment" parameterType="_int">
+	update
+			attachment
+	set
+			status = 'N'
+	where
+			board_no in
+			<foreach collection="list" item="item" open="(" close=")" separator=",">
+ 		  		 #{item}
+ 		  	</foreach> 
+
+	</update>	
+	
+	 	
+	
+</mapper>

@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="farmMapper">
+
+	<resultMap id="farmResultSet" type="farm">
+		<result column="FARM_NO" property="farmNo"/>
+		<result column="FARMER" property="farmer"/>
+		<result column="FARM_NAME" property="farmName"/>
+		<result column="FARM_INTRO" property="farmIntro"/>
+		<result column="LOCAL_CODE" property="localCode"/>
+		<result column="ADDRESS" property="address"/>
+		<result column="PHONE" property="phone"/>
+		<result column="CREATE_DATE" property="createDate"/>
+		<result column="STATUS" property="status"/>
+		<result column="CROP" property="crop"/>
+		<result column="CHANGE_NAME" property="mainImg"/>
+		<result column="PROGRAM_NAME" property="programName"/>
+		<result column="PROGRAM_NO" property="programNo"/>
+	</resultMap>
+	
+	<resultMap id="attachmentResultSet" type="attachment">
+		<result column="file_no" property="fileNo"/>
+	    <result column="origin_name" property="originName"/>
+	    <result column="change_name" property="changeName"/>
+	    <result column="upload_date" property="uploadDate"/>
+	    <result column="board_no" property="boardNo"/>
+	    <result column="board_type" property="boardType"/>
+	    <result column="file_level" property="fileLevel"/>
+	</resultMap>
+	
+	<resultMap id="programResultSet" type="program">
+		<result column="PROGRAM_NO" property="programNo"/>
+		<result column="FARM_NO" property="farmNo"/>
+		<result column="PROGRAM_NAME" property="programName"/>
+		<result column="PROGRAM_PLAN" property="programPlan"/>
+		<result column="PROGRAM_HOUR" property="programHour"/>
+		<result column="PROGRAM_LECTURE" property="programLecture"/>
+		<result column="HEADCOUNT" property="headcount"/>
+		<result column="PROGRAM_DETAIL" property="programDetail"/>
+		<result column="MEM_NO" property="memNo"/>
+		<result column="SIGN_UP" property="signUp"/>
+		<result column="STATUS" property="status"/>
+		<result column="PROGRAM_LOCATION" property="programLocation"/>
+		<result column="ORIGIN_NAME" property="originName"/>
+		<result column="CHANGE_NAME" property="changeName"/>
+		<result column="NOW_HEADCOUNT" property="nowHeadCount"/>
+	</resultMap>
+	
+	<resultMap id="marketResultSet" type="market">
+		<result column="MARKET_NO" property="marketNo"/>
+		<result column="MK_CATEGORY" property="marketCategory"/>
+		<result column="MK_TITLE" property="marketTitle"/>
+		<result column="MK_PRICE" property="marketPrice"/>
+		<result column="MK_INTRO" property="marketIntro"/>
+		<result column="MK_CONTENT" property="marketContent"/>
+		<result column="MK_ENROLLDATE" property="marketEnrollDate"/>
+		<result column="MK_COUNT" property="marketCount"/>
+		<result column="MK_STATUS" property="marketStatus"/>
+		<result column="MEM_NO" property="memNo"/>
+	</resultMap>
+
+	<select id="selectMyFarmList" resultMap="farmResultSet">
+		SELECT 
+		    	 FARM_NO
+		    	,FARMER
+		    	,FARM_NAME
+		    	,LOCAL_CODE
+		    	,ADDRESS
+		    	,PHONE
+		    	,CREATE_DATE
+		    	,STATUS
+		    	,CROP
+		  FROM
+		 		 FARM
+		 WHERE 
+		    	 FARMER = #{memNo}
+		   AND
+		  		 STATUS = 'Y'
+		 ORDER
+		 	BY
+		 		 CREATE_DATE
+	</select>
+	
+	<select id="selectFarmCount" resultType="_int">
+		SELECT
+				COUNT(*)
+		  FROM
+				(
+				SELECT
+						 FARM_NO
+				    	,FARMER
+				    	,FARM_NAME
+				    	,LOCAL_CODE
+				    	,ADDRESS
+				    	,PHONE
+				    	,CREATE_DATE
+				    	,STATUS
+				    	,CROP
+			 	  FROM
+			 	  		FARM
+			 	 WHERE
+			 	 		STATUS = 'Y'
+			 	 <if test="localCode != 'all'">
+			 	   AND
+			 	   		LOCAL_CODE = #{localCode}
+			 	 </if>
+			 	)
+	 	<if test="condition == 'all'">
+	 	 WHERE
+	 	 		FARM_NAME LIKE '%'||#{keyword}||'%'
+	 	 	OR
+	 	 		CROP LIKE '%'||#{keyword}||'%'
+	 	 </if> 
+	 	 <if test="condition == 'farmName'">
+	 	 WHERE
+	 	   		FARM_NAME LIKE '%'||#{keyword}||'%'
+	 	 </if>
+	 	 <if test="condition == 'crop'">
+	 	 WHERE
+	 	   		CROP LIKE '%'||#{keyword}||'%'
+	 	 </if>	
+	</select>
+	
+	<select id="selectFarmList" resultMap="farmResultSet">
+		SELECT 
+				 F.*
+				,A.CHANGE_NAME
+				,P.PROGRAM_NAME
+				,P.PROGRAM_NO
+		  FROM
+				(
+				SELECT
+						*
+				  FROM
+						(
+						SELECT
+								 FARM_NO
+						    	,FARMER
+						    	,FARM_NAME
+						    	,LOCAL_CODE
+						    	,ADDRESS
+						    	,PHONE
+						    	,CREATE_DATE
+						    	,STATUS
+						    	,CROP
+					 	  FROM
+					 	  		FARM
+					 	 WHERE
+					 	 		STATUS = 'Y'
+					 	 <if test="localCode != 'all'">
+					 	   AND
+					 	   		LOCAL_CODE = #{localCode}
+					 	 </if>
+					 	)
+			 	<if test="condition == 'all'">
+			 	 WHERE
+			 	 		FARM_NAME LIKE '%'||#{keyword}||'%'
+			 	 	OR
+			 	 		CROP LIKE '%'||#{keyword}||'%'
+			 	 </if> 
+			 	 <if test="condition == 'farmName'">
+			 	 WHERE
+			 	   		FARM_NAME LIKE '%'||#{keyword}||'%'
+			 	 </if>
+			 	 <if test="condition == 'crop'">
+			 	 WHERE
+			 	   		CROP LIKE '%'||#{keyword}||'%'
+			 	 </if>	
+			 	 ORDER
+			 	 	BY
+			 	 <if test="order == 'recent'">
+			 	 		FARM_NO DESC
+			 	 </if>
+			 	 <if test="order == 'name'">
+			 	 		FARM_NAME
+			 	 </if>
+			 	 ) F
+		  JOIN
+		  		 (
+		  		 SELECT 
+		  		 		 CHANGE_NAME
+		  		 		,BOARD_NO 
+		  		   FROM 
+		  		   		 ATTACHMENT 
+		  		  WHERE 
+		  		  		 BOARD_TYPE = 'F'
+                    AND
+                    	 FILE_LEVEL = 1
+                 ) A ON F.FARM_NO = A.BOARD_NO
+          JOIN 
+		  		 (
+          		 SELECT 
+          				 FARM_NO
+          				,PROGRAM_NO
+          				,PROGRAM_NAME 
+          		   FROM 
+          		  		 PROGRAM
+          		) P ON F.FARM_NO = P.FARM_NO 
+	</select>
+	
+	
+		
+	<select id="selectFarm" resultMap="farmResultSet">
+		SELECT 
+		    	 FARM_NO
+		        ,FARMER
+		        ,FARM_NAME
+		        ,FARM_INTRO
+		        ,LOCAL_CODE
+		        ,ADDRESS
+		        ,PHONE
+		        ,CREATE_DATE
+		        ,STATUS
+		        ,CROP
+		  FROM
+		 		 FARM
+		 WHERE 
+		    	 FARM_NO = #{farmNo}
+		   AND
+		  		 STATUS = 'Y'
+	</select>
+	
+	<select id="selectAttachment" resultMap="attachmentResultSet">
+		SELECT
+				 FILE_NO
+			    ,ORIGIN_NAME
+			    ,CHANGE_NAME
+			    ,UPLOAD_DATE
+			    ,BOARD_NO
+			    ,BOARD_TYPE
+			    ,FILE_LEVEL
+		 FROM
+				 ATTACHMENT
+		WHERE
+				 BOARD_NO = #{farmNo}
+		  AND
+				 BOARD_TYPE = 'F'
+		ORDER
+		   BY
+				 FILE_NO
+	</select>
+	
+	<select id="selectProgram" resultMap="programResultSet">
+		select
+				program_no,
+				farm_no,
+				program_name,
+				TO_CHAR(program_plan, 'YYYY-MM-DD') as program_plan,
+				program_hour,
+				program_lecture,
+				headcount,
+				program_detail,
+				sign_up,
+				mem_no,
+				status
+
+		  from
+				program
+		 where
+				status = 'Y'
+	       and
+				farm_no = #{farmNo}
+	</select>
+	
+	<select id="selectMarket" resultMap="marketResultSet">
+		SELECT
+				 MARKET_NO
+				,MK_TITLE
+				,MK_PRICE
+		  FROM
+		  		 MARKET
+		 WHERE
+		 		 MK_STATUS = 'Y'
+		   AND
+		   		 MEM_NO = #{memNo}
+	</select>
+	
+	<select id="selectMarketAt" resultMap="attachmentResultSet">
+		SELECT
+				 FILE_NO
+				,ORIGIN_NAME
+				,CHANGE_NAME
+				,BOARD_NO
+		  FROM
+		  		 ATTACHMENT
+		 WHERE 
+		 		 BOARD_TYPE = 'mk'
+		   AND
+		   		 BOARD_NO IN
+		<foreach collection="list" item="mk" open="(" separator="," close=")">
+				 #{mk.marketNo}		
+		</foreach>
+		   		
+	</select>
+	
+	<insert id="insertFarm" parameterType="farm">
+		INSERT
+		  INTO
+				 FARM
+				 (
+				 FARM_NO
+			    ,FARMER
+			    ,FARM_NAME
+			    ,FARM_INTRO
+			    ,LOCAL_CODE
+			    ,ADDRESS
+			    ,PHONE
+			    ,CROP
+				)
+		VALUES
+				(
+				 SEQ_FNO.NEXTVAL
+			    ,#{farmer}
+			    ,#{farmName}
+			    ,#{farmIntro}
+			    ,#{localCode}
+			    ,#{address}
+			    ,#{phone}
+			    ,#{crop}
+				)
+	</insert>
+	
+	<select id="selectFileNo" resultType="_int">
+		SELECT
+				FILE_NO
+		  FROM
+		  		ATTACHMENT
+		 WHERE
+		 		BOARD_NO = #{farmNo}
+		   AND
+		 		BOARD_TYPE = 'F'
+			
+	</select>
+	
+	<delete id="deleteAttachment">
+		DELETE
+		  FROM
+		  		ATTACHMENT
+		 WHERE
+		 		FILE_NO IN
+		<foreach collection="list" item="fileNo" open="(" separator="," close=")">
+				 #{fileNo}		
+		</foreach>
+	</delete>
+	
+	<update id="insertAttachment">
+		INSERT
+		  INTO
+		  		ATTACHMENT
+		  		(
+		  		file_no,
+		  		board_no,
+		  		origin_name,
+		  		change_name,
+		  		board_type,
+		  		file_level
+		  		)
+		 		SELECT 
+		 				 SEQ_ANO.NEXTVAL as fileNo
+		 				,SEQ_FNO.CURRVAL as farmNo
+		 				,A.*
+				  FROM
+					   (
+						<foreach collection="list" item="at" separator="UNION ALL">
+							SELECT
+							  	     #{at.originName} as originName
+							  	    ,#{at.changeName} as changeName
+							  	    ,'F' as boardType
+							  	    ,#{at.fileLevel} as fileLevel
+							  FROM
+							  		 SYS.DUAL
+						 </foreach>
+					    ) A
+	</update>
+	
+	<update id="updateInsertAttachment">
+		INSERT
+		  INTO
+		  		ATTACHMENT
+		  		(
+		  		file_no,
+		  		origin_name,
+		  		change_name,
+		  		board_type,
+		  		board_no,
+		  		file_level
+		  		)
+		 		SELECT 
+		 				SEQ_ANO.NEXTVAL as fileNo, A.*
+				  FROM
+					   (
+						<foreach collection="list" item="at" separator="UNION ALL">
+							SELECT
+							  	     #{at.originName} as originName
+							  	    ,#{at.changeName} as changeName
+							  	    ,'F' as boardType
+							  	    ,#{at.boardNo} as boardNo
+							  	    ,#{at.fileLevel} as fileLevel
+							  FROM
+							  		 SYS.DUAL
+						</foreach>
+					    ) A
+	</update>
+	
+	<update id="updateFarm">
+		UPDATE
+		   		FARM
+		   SET
+		   		 FARM_NAME = #{farmName}
+		   		,ADDRESS = #{address}
+		   		,PHONE = #{phone}
+		   		,FARM_INTRO = #{farmIntro}
+		   		,CROP = #{crop}
+		 WHERE
+		 		FARM_NO = #{farmNo}
+	</update>
+	
+	<update id="deleteFarm">
+		UPDATE
+				FARM
+		   SET
+		   		STATUS = 'N'
+		 WHERE
+		 		FARM_NO = #{farmNo}
+	</update>
+
+</mapper>

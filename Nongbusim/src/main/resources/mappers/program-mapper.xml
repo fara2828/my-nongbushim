@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="programMapper">
+
+	<resultMap id="programResultSet" type="program">
+		<result column="PROGRAM_NO" property="programNo"/>
+		<result column="FARM_NO" property="programNo"/>
+		<result column="PROGRAM_NAME" property="programName"/>
+		<result column="PROGRAM_PLAN" property="programPlan"/>
+		<result column="PROGRAM_HOUR" property="programHour"/>
+		<result column="PROGRAM_LECTURE" property="programLecture"/>
+		<result column="HEADCOUNT" property="headcount"/>
+		<result column="PROGRAM_DETAIL" property="programDetail"/>
+		<result column="MEM_NO" property="memNo"/>
+		<result column="SIGN_UP" property="signUp"/>
+		<result column="STATUS" property="status"/>
+		<result column="PROGRAM_LOCATION" property="programLocation"/>
+		<result column="ORIGIN_NAME" property="originName"/>
+		<result column="CHANGE_NAME" property="changeName"/>
+		<result column="NOW_HEADCOUNT" property="nowHeadCount"/>
+	</resultMap>
+	
+	<resultMap id="markResultSet" type="mark">
+		<result column="MEM_NO" property="memNo"/>
+		<result column="STATUS" property="status"/>
+		<result column="BOARD_TYPE" property="boardType"/>
+		<result column="BOARD_NO" property="boardNo"/>
+	
+	</resultMap>
+	
+	
+	<insert id="registerProgram" parameterType="program">
+	
+		insert
+				into
+					program
+					(
+					PROGRAM_NO,
+					FARM_NO,
+					PROGRAM_NAME,
+					PROGRAM_PLAN,
+					PROGRAM_HOUR,
+					PROGRAM_LECTURE,
+					HEADCOUNT,
+					PROGRAM_DETAIL,
+					SIGN_UP,
+					STATUS,
+					PROGRAM_LOCATION,
+					MEM_NO,
+					ORIGIN_NAME,
+					CHANGE_NAME,
+					NOW_HEADCOUNT
+					
+					
+					 
+					)
+			values
+					(
+					seq_pno.nextval,
+					#{farmNo},
+					#{programName},
+					#{programPlan},
+					#{programHour},
+					#{programLecture},
+					#{headcount},
+					#{programDetail},
+					'진행',
+					'Y',
+					#{programLocation},
+					#{memNo},
+					#{originName},
+					#{changeName},
+					0
+					) 
+	
+	</insert>
+	
+	
+	<!-- 검색 된 게시글 세기 -->
+	<select id="selectProgramCount" resultType="_int">
+		select
+				count(*)
+	      from
+	      		program
+	      where
+	      		status= 'Y'
+	      	and
+				program_name LIKE '%'||#{keyword}||'%'
+	</select>
+	
+	
+	
+	<select id="selectListCount" resultType="_int">
+		select
+				count(*)
+	      from
+	      		program
+	      where
+	      		status= 'Y'
+	</select>
+	
+	
+	<select id="selectList" resultMap="programResultSet">
+	
+		select 
+				program_no,
+				program_location,
+				program_name,
+				to_char(program_plan,'YYYY-MM-DD') as  "program_plan",
+				headcount,
+				sign_up,
+				now_headcount
+			from
+				program
+			where
+				status = 'Y'
+				
+		
+			and
+				program_name LIKE '%'||#{keyword}||'%'
+			
+			order
+				by
+					program_no desc
+					
+					
+	</select>
+	
+	
+	
+		<select id="selectProgram" parameterType="program" resultMap="programResultSet">
+	 
+			select
+				program_no,
+				farm_no,
+				program_name,
+				to_char(program_plan,'YYYY-MM-DD') as  "program_plan",
+				program_hour,
+				program_lecture,
+				headcount,
+				program_detail,
+				sign_up,
+				mem_no,
+				status,
+				program_location,
+				origin_name,
+				change_name,
+				now_headcount
+				
+			from
+				program
+			where
+				status = 'Y'
+			and
+				program_no = #{programNo}
+			
+		</select>
+	
+		<insert id="joinProgram" parameterType="program">
+	
+		insert 
+			into
+				my_program
+				(
+					mem_no,
+					program_no
+				)
+				
+				values
+				
+				(
+					#{memNo},
+					#{programNo}
+					
+				)
+	
+		</insert>
+	
+		<select id="selectProgramNo" parameterType="program" resultMap="programResultSet">
+	 
+		select
+			program_no
+		from
+			my_program
+		where
+			mem_no = #{memNo}
+		
+			
+		</select>
+	
+		<insert id="wishProgram" parameterType="program">
+	
+		insert 
+			into
+				mark
+				(
+					mem_no,
+					status,
+					board_type,
+					board_no
+				)
+				
+				values
+				
+				(
+					#{memNo},
+					1,
+					'P',
+					#{programNo}
+					
+			)
+		</insert>
+		
+		
+		<update id="wishDelete"  parameterType="program" >
+			update 
+		        mark
+		    set
+		        status = 0
+		    where 
+		        board_no = #{programNo}
+		    and
+		    	board_type = 'P'
+		    and 
+		    	mem_no = #{memNo}
+		
+		</update>
+		
+		<select id="selectMarkNo" parameterType="mark" resultMap="markResultSet">
+	 
+		select
+			board_no
+		from
+			mark
+		where
+			mem_no = #{memNo}
+		and 
+			status = 1
+		and 
+			board_type = 'P'
+			
+		</select>
+		
+		
+		<!-- 신청 회원 증가 -->
+		<update id="headCountIncrease"  parameterType="program" >
+		
+			UPDATE 
+				PROGRAM 
+			SET 
+				NOW_HEADCOUNT = NOW_HEADCOUNT + 1 
+			WHERE
+				PROGRAM_NO = #{programNo}
+		
+		</update>
+		
+		<!-- 내가 참여한 프로그램 조회 -->
+		<select id="selectMyProgram" parameterType="program" resultMap="programResultSet">
+	 
+		select 
+            p.program_name,
+            p.program_plan,
+            p.program_no
+   		 from 
+            program p, my_program m
+        
+   		 where 
+            p.program_no = m.program_no
+    	 and 
+            m.mem_no = #{memNo}
+			
+		</select>
+		
+		<select id="selectTopProgram" resultMap="programResultSet">
+		
+		select
+			    *
+			from(select
+	                program_no,
+			        program_name,
+			        program_lecture,
+	                to_char(program_plan,'YYYY-MM-DD') as  "program_plan",
+	                now_headcount
+			        
+			    from
+			        program
+			    where
+			        status = 'Y'
+			    order
+			        by
+			            now_headcount desc)
+			where rownum between 1 and 5
+		
+		
+		</select>
+		
+		
+		
+		
+ 
+</mapper>

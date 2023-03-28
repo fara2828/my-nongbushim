@@ -1,0 +1,481 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="marketMapper">
+	
+	<resultMap id="marketResultSet" type="market">
+		
+		<result column="MARKET_NO" property="marketNo"/>
+		<result column="MK_CATEGORY" property="marketCategory"/>
+		<result column="MK_TITLE" property="marketTitle"/>
+		<result column="MK_PRICE" property="marketPrice"/>
+		<result column="MK_INTRO" property="marketIntro"/>
+		<result column="MK_CONTENT" property="marketContent"/>
+		<result column="MK_ENROLLDATE" property="marketEnrollDate"/>
+		<result column="MK_COUNT" property="marketCount"/>
+		<result column="MK_STATUS" property="marketStatus"/>
+		<result column="MEM_NO" property="memNo"/>
+		<result column="CHANGE_NAME" property="changeName" />
+		
+		
+	</resultMap>
+	
+	
+	<resultMap id="attachmentResultSet" type="attachment">
+		
+		<result column="file_no" property="fileNo"/>
+		<result column="origin_name" property="originName"/>
+		<result column="change_name" property="changeName"/>
+		<result column="upload_date" property="uploadDate"/>
+		<result column="board_no" property="boardNo"/>
+		<result column="board_type" property="boardType"/>
+		
+	</resultMap>
+	
+	<resultMap id="commentResultSet" type="comment">
+	
+		<result column="COMMENT_NO" property="commentNo" />
+		<result column="COMMENT_CONTENT" property="commentContent" />
+		<result column="ENROLL_DATE" property="commentEnrollDate" />
+		<result column="BOARD_NO" property="boardNo" />
+		<result column="BOARD_TYPE" property="boardType" />
+		<result column="MEM_NO" property="memNo" />
+		<result column="STATUS" property="status" />
+		<result column="MEM_ID" property="memId" />
+		<result column="SECRET" property="secret" />
+	
+	</resultMap>
+
+	<resultMap id="markResultSet" type="mark">
+	
+		<result column="MEM_NO" property="memNo"/>
+		<result column="STATUS" property="status"/>
+		<result column="BOARD_TYPE" property="boardType"/>
+		<result column="BOARD_NO" property="boardNo"/>
+	
+	</resultMap>
+	
+
+
+	<insert id="insertMarket">
+		
+		INSERT
+		  INTO
+				MARKET
+				(
+				MARKET_NO
+			   ,MK_CATEGORY
+			   ,MK_TITLE
+			   ,MK_PRICE
+			   ,MK_INTRO
+			   ,MK_CONTENT
+			   ,MEM_NO
+				)
+		VALUES
+				(
+				SEQ_MKNO.NEXTVAL
+			   ,#{marketCategory}
+			   ,#{marketTitle}
+			   ,#{marketPrice}
+			   ,#{marketIntro}
+			   ,#{marketContent}
+			   ,#{memNo}
+				)
+	
+	</insert>
+	
+	
+	<select id="selectListCount" resultType="_int">
+	
+		select
+	       		 count(*)
+		from
+			       market
+		 where
+			       mk_status = 'Y'
+		<if test="marketCategory != null">
+		
+			and	
+				mk_category = #{marketCategory}
+		</if>
+	
+	</select>
+	
+	
+	<select id="marketSelectList" resultMap="marketResultSet">
+	
+		select 
+			   market_no
+			  ,mk_category
+			  ,mk_title
+			  ,mk_price
+			  ,mk_count
+			  ,to_char(mk_enrolldate, 'YYYY-MM-DD') as "mk_enrolldate"
+              ,mem_no
+		  from
+		       market
+		 where
+		       mk_status = 'Y'
+		<if test="marketCategory != null">
+			and	
+				mk_category = #{marketCategory}
+		</if>
+		 order
+		    by
+		       mk_enrolldate desc
+	
+	</select>
+	
+	
+	
+	<select id="attachmentSelectList" resultMap="attachmentResultSet">
+	
+		SELECT *
+		   FROM (
+		        SELECT 
+		            board_no,
+		            file_no,
+		            origin_name,
+		            change_name,
+		            upload_date,
+		            board_type,
+		            ROW_NUMBER() OVER (PARTITION BY board_no ORDER BY file_no) AS RN
+		        FROM 
+		            ATTACHMENT
+		        where 
+		        	board_type = 'mk'
+		        	) a
+		WHERE 
+				a.RN = 1
+	
+	</select>
+	
+	
+	<update id="increaseCount">
+		
+		update
+		    market
+		set
+		    mk_count = mk_count + 1
+		where
+		    mk_status = 'Y'
+		and
+		    market_No = #{ marketNo }
+	
+	</update>
+	
+	
+	<select id="marketDetailView" resultMap="marketResultSet">
+	
+		select
+			  market_no
+			  ,mk_category
+			  ,mk_title
+			  ,mk_price
+			  ,mk_intro
+			  ,mk_content
+			  ,to_char(mk_enrolldate, 'YYYY-MM-DD') as "mk_enrolldate"
+			  ,mk_count
+			  ,mk_status
+			  ,mem_no
+		from
+			 market
+		where
+			mk_status = 'Y'
+		and
+			market_no = #{ marketNo }
+			
+	
+	</select>
+	
+	
+	<select id="marketDetailAttachment" resultMap="attachmentResultSet">
+	
+		select 
+				file_no
+				,origin_name
+				,change_name
+				,upload_date
+				,board_no
+				,board_type
+		from
+				attachment
+		join
+				market
+		on    
+				(board_no = #{marketNo})
+		where
+				board_type = 'mk'
+        and
+                market_no = #{marketNo}
+        order
+            by
+                file_no
+	
+	</select>
+	
+	
+	<delete id="marketDeleteAttachment">
+	
+		delete
+			from
+				attachment
+			where
+				board_no = #{ marketNo }
+			and
+				board_type = 'mk'
+	
+	</delete>
+	
+	
+	<update id="marketDelete">
+		
+		update 
+				market
+		set
+			mk_status = 'N'
+		where
+			market_No = #{ marketNo }
+
+	
+	
+	
+	</update>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<insert id="ajaxInsertMarketComment">
+	
+		insert
+				into
+					"COMMENT"
+					(
+					comment_no
+					,comment_content
+					,board_type
+					,board_no
+					,mem_no
+					,secret
+					)
+				values
+					(
+					seq_cno.nextval
+					,#{commentContent}
+					,#{boardType}
+					,#{boardNo}
+					,#{memNo}
+					,#{secret}
+					)
+	
+	
+	</insert>
+	
+	
+	<select id="ajaxSelectListMarketComment" resultMap="commentResultSet">
+	
+		select
+			 c.comment_no
+			 ,c.comment_content
+			 ,to_char(c.enroll_date, 'YYYY-MM-DD') as "enroll_date"
+			 ,c.mem_no
+			 ,m.mem_id
+			 ,c.secret
+		from
+			"COMMENT" c
+		join
+			member m
+		on
+			(m.mem_no = c.mem_no)
+		where
+			board_no = #{ boardNo }
+		and
+			board_type = #{ boardType }
+		and
+			status	= 'Y'
+		order
+			by
+			  comment_no desc
+	
+	</select>
+	
+	
+	
+	
+	<update id="ajaxDeleteMarketComment">
+	
+		update
+				"COMMENT"
+		set 
+				status = 'N'
+		where
+				comment_no = #{ commentNo }
+	
+	
+	</update>
+	
+	
+	
+	<select id="ajaxMarkMarket" resultMap="markResultSet">
+	
+		select
+			board_no
+		from
+			mark
+		where
+			mem_no = #{memNo}
+		and 
+			status = 1
+		and 
+			board_type = 'mk'
+			
+	</select>
+	
+	
+	
+	<insert id="ajaxClickMarkMarket">
+	
+		 <if test="status != 1">
+		 
+			insert
+				into
+					mark
+				values
+				(
+				#{memNo}
+				,1
+				,'mk'
+				,#{boardNo}
+				)
+		</if>
+	
+	</insert>
+	
+	
+	
+	<delete id="ajaxClickUnmarkMarket">
+		
+		<if test="status != 0">
+		 
+			delete
+				from
+				 mark
+			where
+				mem_no = #{ memNo}
+			and
+				board_no = #{boardNo}
+			and
+				board_type = 'mk'
+		</if>
+	
+	
+	
+	</delete>
+	
+	
+	<select id="markMarket" resultMap="markResultSet">
+	
+		select
+			mem_no
+			,status
+			,board_no
+		from	
+			mark
+		where
+			mem_no = #{memNo}
+		and
+			board_type = 'mk'
+		and
+			board_no = #{marketNo}
+	
+	
+	</select>
+	
+	
+	<update id="ajaxUpdateMarketComment">
+	
+		update 
+			"COMMENT"
+		set
+			comment_content = #{ commentContent},
+			enroll_date = SYSDATE
+		where
+			mem_no = #{memNo}
+		and
+			board_type = 'mk'
+		and	
+			comment_no = #{commentNo}
+	
+	
+	</update>
+	
+	
+	<select id="ajaxMainMarketList" resultMap="marketResultSet">
+		
+			select *
+			    from (
+			        select 
+			            rownum rnum, a.*
+			                from(
+			                    select
+			                        mk_title
+			                        ,mk_price
+			                        ,mk_count
+			                        ,mk_enrollDate
+			                        ,mem_id
+			                        ,market_no
+			                        ,change_name
+			                        ,ROW_NUMBER() OVER (PARTITION BY board_no ORDER BY file_no) as rn
+			                    from
+			                        market 
+			                    join
+			                        member
+			                    using
+			                        (mem_no)
+			                    join
+			                        attachment
+			                    on
+			                        (board_no = market_no)
+			                    where
+			                        mk_status = 'Y'
+			                    and
+			                        board_type = 'mk'
+			                    order
+			                        by
+			                            mk_enrolldate desc) a
+			     	where
+			            	rn = 1)
+			    	where
+			            	rnum BETWEEN 1 AND 3
+		 
+		
+	</select>
+	
+	
+	<update id="marketUpdate">
+	
+		 update
+		 		market
+		 	set
+		 		mk_category = #{marketCategory},
+				mk_title = #{marketTitle},
+				mk_price = #{marketPrice},
+				mk_intro = #{marketIntro},
+				mk_content = #{marketContent},
+				mk_enrolldate = sysdate,
+				mk_count = #{marketCount}
+			where
+				market_no = #{marketNo}		
+			and
+				mem_no = #{memNo}
+		
+	</update>
+	
+	
+</mapper>

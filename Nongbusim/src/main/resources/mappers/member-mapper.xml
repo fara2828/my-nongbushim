@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="memberMapper">
+
+	<resultMap id="memberResultSet" type="member">
+		<result column="MEM_NO" property="memNo"/>
+		<result column="MEM_ID" property="memId"/>
+		<result column="MEM_PWD" property="memPwd"/>
+		<result column="NAME" property="name"/>
+		<result column="NICKNAME" property="nickName"/>
+		<result column="PHONE" property="phone"/>
+		<result column="GENDER" property="gender"/>
+		<result column="EMAIL" property="email"/>
+		<result column="ENROLL_DATE" property="enrollDate"/>
+		<result column="MEM_STATUS" property="memStatus"/>
+		<result column="FARMER_CODE" property="farmerCode"/>
+		<result column="CAREER" property="career"/>
+		<result column="MODIFY_DATE" property="modifyDate"/>
+		<result column="UPDATE_PWD" property="updatePwd"/>			
+	</resultMap>
+	
+	<resultMap id="boardResultSet" type="board">
+		<result column="board_no"      property="boardNo" />
+		<result column="board_type"   property="boardType" />
+		<result column="board_title"  property="boardTitle" />
+		<result column="board_content"  property="boardContent" />
+		<result column="create_date"   property="createDate" />
+		<result column="modify_date"   property="modifyDate" />
+		<result column="thumbnail"   property="thumbnail" />
+		<result column="recruit_yn"   property="recruitYN" />
+		<result column="count"         property="count" />
+		<result column="status"   property="status" />
+		<result column="mem_no" property="memNo" />
+		<result column="board_writer" property="boardWriter" />
+		<result column="board_like" property="boardLike" />
+	</resultMap>
+	
+	<resultMap id="programResultSet" type="program">
+		<result column="PROGRAM_NO" property="programNo"/>
+		<result column="FARM_NO" property="farmNo"/>
+		<result column="PROGRAM_NAME" property="programName"/>
+		<result column="PROGRAM_PLAN" property="programPlan"/>
+		<result column="PROGRAM_HOUR" property="programHour"/>
+		<result column="PROGRAM_LECTURE" property="programLecture"/>
+		<result column="HEADCOUNT" property="headcount"/>
+		<result column="PROGRAM_DETAIL" property="programDetail"/>
+		<result column="MEM_NO" property="memNo"/>
+		<result column="SIGN_UP" property="signUp"/>
+		<result column="STATUS" property="status"/>
+		<result column="PROGRAM_LOCATION" property="programLocation"/>
+		<result column="ORIGIN_NAME" property="originName"/>
+		<result column="CHANGE_NAME" property="changeName"/>
+		<result column="NOW_HEADCOUNT" property="nowHeadCount"/>
+	</resultMap>
+	
+	<resultMap id="marketResultSet" type="market">
+		<result column="MARKET_NO" property="marketNo"/>
+		<result column="MK_CATEGORY" property="marketCategory"/>
+		<result column="MK_TITLE" property="marketTitle"/>
+		<result column="MK_PRICE" property="marketPrice"/>
+		<result column="MK_INTRO" property="marketIntro"/>
+		<result column="MK_CONTENT" property="marketContent"/>
+		<result column="MK_ENROLLDATE" property="marketEnrollDate"/>
+		<result column="MK_COUNT" property="marketCount"/>
+		<result column="MK_STATUS" property="marketStatus"/>
+		<result column="MEM_NO" property="memNo"/>
+	</resultMap>
+	
+	<resultMap id="certResultSet" type="cert">
+		<result column="WHO" property="who" />
+		<result column="SECRET" property="secret" />
+		<result column="WHEN" property="when" />
+	</resultMap>
+
+	<!-- 로그인 -->
+	<select id="loginMember" parameterType="member" resultMap="memberResultSet">
+		SELECT MEM_NO, MEM_ID, MEM_PWD, NAME, NICKNAME, PHONE, GENDER, EMAIL, ENROLL_DATE, MEM_STATUS, FARMER_CODE, CAREER
+		FROM MEMBER
+		WHERE MEM_ID = #{memId}
+		OR MEM_STATUS = 'A'
+		AND MEM_STATUS = 'Y'
+	</select>
+
+	<!-- 일반 사용자 회원가입 -->
+	<insert id="userInsertMember" parameterType="member">
+		INSERT INTO MEMBER(MEM_NO, MEM_ID, MEM_PWD, NAME, NICKNAME, PHONE, GENDER, EMAIL, ENROLL_DATE, MEM_STATUS)
+		VALUES(SEQ_MNO.NEXTVAL, #{memId}, #{memPwd}, #{name}, #{nickName}, #{phone}, #{gender}, #{email}, SYSDATE, 'Y')
+	</insert>
+	
+	<!-- 농부 회원가입 -->
+	<insert id="farmerInsertMember" parameterType="member">
+		INSERT INTO MEMBER(MEM_NO, MEM_ID, MEM_PWD, NAME, NICKNAME, PHONE, GENDER, EMAIL, ENROLL_DATE, MEM_STATUS, FARMER_CODE, CAREER)
+		VALUES(SEQ_MNO.NEXTVAL, #{memId}, #{memPwd}, #{name}, #{nickName}, #{phone}, #{gender}, #{email}, SYSDATE, 'Y', #{farmerCode}, #{career})
+	</insert>
+	
+	<!-- 일반 사용자 정보 수정 -->
+	<update id="updateUser" parameterType="member">
+		UPDATE MEMBER
+		SET NAME = #{name}, EMAIL = #{email}, NICKNAME = #{nickName}, PHONE = #{phone}, MODIFY_DATE = SYSDATE
+		WHERE MEM_ID = #{memId}
+		AND MEM_STATUS = 'Y'
+	</update>
+	
+	<!-- 농부 정보 수정 -->
+	<update id="updateFarmer" parameterType="member">
+		UPDATE MEMBER
+		SET NAME = #{name}, EMAIL = #{email}, NICKNAME = #{nickName}, PHONE = #{phone}, MODIFY_DATE = SYSDATE, FARMER_CODE = #{farmerCode}, CAREER = #{career}
+		WHERE MEM_ID = #{memId}
+		AND MEM_STATUS = 'Y'
+	</update>
+	
+	<!-- 일반 사용자 탈퇴 -->
+	<update id="deleteUser" parameterType="String">
+		UPDATE MEMBER
+		SET MEM_STATUS = 'N'
+		WHERE MEM_ID = #{memId}
+	</update>
+	
+	<!-- 농부 탈퇴 -->
+	<update id="deleteFarmer" parameterType="String">
+		UPDATE MEMBER
+		SET MEM_STATUS = 'N'
+		WHERE MEM_ID = #{memId}
+	</update>
+	
+	<!-- 아이디 중복 체크 -->
+	<select id="idCheck" resultType="_int">
+		SELECT COUNT(*)
+		FROM MEMBER
+		WHERE MEM_ID = #{memId}
+		AND MEM_STATUS = 'Y'
+	</select>
+	
+	<!-- 일반 사용자가 작성한 게시글 조회 -->
+	<select id="userMyBoardList" resultMap="boardResultSet" parameterType="board">
+		SELECT BOARD_NO, BOARD_TYPE, BOARD_TITLE, BOARD_CONTENT, CREATE_DATE, MODIFY_DATE, THUMBNAIL, RECRUIT_YN, COUNT, STATUS, MEM_NO
+		FROM BOARD
+		WHERE MEM_NO = #{memNo}
+		AND STATUS = 'Y'
+	</select>
+	
+	<!-- 일반 사용자가 작성한 마켓글 조회 -->
+	<select id="userMyMarketList" resultMap="marketResultSet" parameterType="market">
+		SELECT MARKET_NO, MK_CATEGORY, MK_TITLE, MK_PRICE, MK_INTRO, MK_CONTENT, to_char(MK_ENROLLDATE, 'YYYY-MM-DD') as "MK_ENROLLDATE", MK_COUNT, MK_STATUS, MEM_NO
+		FROM MARKET
+		WHERE MEM_NO = #{memNo}
+		AND MK_STATUS = 'Y'
+	</select>
+	
+	<!-- 농부가 작성한 게시글 조회 -->
+	<select id="farmerMyBoardList" resultMap="boardResultSet" parameterType="board">
+		SELECT BOARD_NO, BOARD_TYPE, BOARD_TITLE, BOARD_CONTENT, CREATE_DATE, MODIFY_DATE, THUMBNAIL, RECRUIT_YN, COUNT, STATUS, MEM_NO
+		FROM BOARD
+		WHERE MEM_NO = #{memNo}
+		AND STATUS = 'Y'
+	</select>
+	
+	<!-- 농부가 작성한 프로그램 조회 -->
+	<select id="farmerMyProgramList" resultMap="programResultSet" parameterType="program">
+		SELECT PROGRAM_NO, FARM_NO, PROGRAM_NAME, PROGRAM_PLAN, PROGRAM_HOUR, PROGRAM_LECTURE, HEADCOUNT, PROGRAM_DETAIL, SIGN_UP, STATUS, MEM_NO, ORIGIN_NAME, CHANGE_NAME, PROGRAM_LOCATION, NOW_HEADCOUNT
+		FROM PROGRAM
+		WHERE MEM_NO = #{memNo}
+		AND PROGRAM.STATUS = 'Y'
+	</select>
+	
+	<!-- 농부가 작성한 마켓글 조회 -->
+	<select id="farmerMyMarketList" resultMap="marketResultSet" parameterType="market">
+		SELECT MARKET_NO, MK_CATEGORY, MK_TITLE, MK_PRICE, MK_INTRO, MK_CONTENT, to_char(MK_ENROLLDATE, 'YYYY-MM-DD') as "MK_ENROLLDATE", MK_COUNT, MK_STATUS, MEM_NO
+		FROM MARKET
+		WHERE MEM_NO = #{memNo}
+		AND MK_STATUS = 'Y'
+	</select>
+	
+	<!-- 찜한 프로그램 -->
+	<select id="markProgram" resultMap="programResultSet" parameterType="program">
+		SELECT DISTINCT PROGRAM_LOCATION, PROGRAM_NAME , PROGRAM_PLAN, HEADCOUNT, SIGN_UP, PROGRAM_NO
+	    FROM PROGRAM 
+	    JOIN MARK ON (PROGRAM.PROGRAM_NO = MARK.BOARD_NO) 
+	    WHERE MARK.MEM_NO = #{memNo}
+	    AND MARK.BOARD_TYPE = 'P'
+	    AND PROGRAM.STATUS = 'Y'
+	    AND MARK.STATUS = 1
+	    AND BOARD_NO = PROGRAM.PROGRAM_NO
+	</select>
+	
+	<!-- 찜한 마켓 --><!-- 테스트 전 -->
+	<select id="markMarket" resultMap="marketResultSet" parameterType="market">
+		SELECT MK_CATEGORY, MK_TITLE, MK_PRICE, MK_ENROLLDATE
+		FROM MARKET
+		JOIN MARK ON (MARKET_NO = BOARD_NO)
+		WHERE MARK.MEM_NO = #{memNo}
+		AND BOARD_TYPE = 'T'
+		AND MK_STATUS = 'Y'
+		AND MARK.STATUS = 1
+		AND BOARD_NO = MARKET_NO
+	</select>
+	
+	<!-- 아이디 찾기 -->
+	<select id="findId" resultMap="memberResultSet" parameterType="member">
+		SELECT NVL(MAX(MEM_ID), 9999) MEM_ID 
+		FROM MEMBER 
+		WHERE NAME = #{name}
+		AND EMAIL = #{email}
+		AND MEM_STATUS = 'Y'
+	</select>
+	
+	<!-- 비밀번호 변경 -->
+	<update id="updatePwd" parameterType="member">
+		UPDATE MEMBER
+		SET MEM_PWD = #{updatePwd}, MODIFY_DATE = SYSDATE
+		WHERE MEM_NO = #{memNo}
+		AND MEM_STATUS = 'Y'
+	</update>
+	
+	<!-- 메일 인증 -->
+	<insert id="sendCertNum" parameterType="cert">
+		INSERT INTO CERT(WHO, SECRET, WHEN)
+		VALUES(#{who}, #{secret}, SYSDATE)
+	</insert>
+	
+	<select id="chkCertNum" resultType="cert" parameterType="cert">
+		SELECT WHO, SECRET, WHEN
+		FROM CERT
+		WHERE WHO = #{who}
+		AND SECRET = #{secret}
+		AND WHEN BETWEEN SYSDATE - 3/24/60 AND SYSDATE
+	</select>
+	
+	<delete id="deleteCertNum" parameterType="cert">
+		DELETE CERT
+		WHERE WHO = #{who}
+		AND SECRET = #{secret}
+	</delete>
+</mapper>

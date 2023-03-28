@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="boardMapper">
+
+	<resultMap id="boardResultSet" type="board">
+		<result column="board_no"      property="boardNo" />
+		<result column="board_type"   property="boardType" />
+		<result column="board_title"  property="boardTitle" />
+		<result column="board_content"  property="boardContent" />
+		<result column="create_date"   property="createDate" />
+		<result column="modify_date"   property="modifyDate" />
+		<result column="thumbnail"   property="thumbnail" />
+		<result column="recruit_yn"   property="recruitYN" />
+		<result column="count"         property="count" />
+		<result column="status"   property="status" />
+		<result column="mem_no" property="memNo" />
+		<result column="board_writer" property="boardWriter" />
+		<result column="board_like" property="boardLike" />
+	</resultMap>
+	
+	<resultMap id="attachmentResultSet" type="attachment">
+		<result column="file_no"      property="fileNo" />
+		<result column="origin_name"   property="originName" />
+		<result column="change_name"  property="changeName" />
+		<result column="upload_date"   property="uploadDate" />
+		<result column="board_no"   property="boardNo" />
+		<result column="board_type"   property="boardType" />
+	</resultMap>
+	
+	<resultMap id="likeResultSet" type="like">
+		<result column="MEM_NO" property="memNo"/>
+		<result column="STATUS" property="status"/>
+		<result column="BOARD_TYPE" property="boardType"/>
+		<result column="BOARD_NO" property="boardNo"/>
+	</resultMap>
+	
+	
+
+	<select id="selectListCount" resultType="_int" parameterType="hashmap">
+		SELECT
+				COUNT(*)
+		  FROM
+		  		(
+		  		 SELECT
+			  		   board_no
+				      ,board_title
+				      ,board_content
+				      ,to_char(create_date, 'YYYY-MM-DD') as "create_date"
+				      ,count
+				      ,board_type
+				      ,board_writer
+				      ,board_like
+				  FROM
+				  	  board
+				 WHERE
+					  STATUS = 'Y'
+		   		   AND 
+		   			  BOARD_TYPE= #{boardType}
+		  		)
+		<if test="condition == 'all'">
+		 WHERE	
+				BOARD_CONTENT LIKE '%'||#{keyword}||'%'
+			OR
+				BOARD_TITLE LIKE '%'||#{keyword}||'%'
+		</if>
+		<if test="condition == 'title'">
+		 WHERE
+				BOARD_TITLE LIKE '%'||#{keyword}||'%'
+		</if>
+		<if test="condition == 'content'">
+		 WHERE
+				BOARD_CONTENT LIKE '%'||#{keyword}||'%'
+		</if>
+	</select>
+
+
+	<select id="selectList" resultMap="boardResultSet" parameterType="hashmap">
+		SELECT
+				*
+		  FROM
+		  		(
+		  		 SELECT
+			  		   board_no
+				      ,board_title
+				      ,board_content
+				      ,to_char(create_date, 'YYYY-MM-DD') as "create_date"
+				      ,count
+				      ,board_type
+				      ,board_writer
+				      ,board_like
+				  FROM
+				  	  board
+				 WHERE
+					  STATUS = 'Y'
+		   		   AND 
+		   			  BOARD_TYPE= #{boardType}
+		  		)
+		<if test="condition == 'all'">
+		 WHERE
+				BOARD_CONTENT LIKE '%'||#{keyword}||'%'
+			OR
+				BOARD_TITLE LIKE '%'||#{keyword}||'%'
+		</if>
+		<if test="condition == 'title'">
+		 WHERE
+				BOARD_TITLE LIKE '%'||#{keyword}||'%'
+		</if>
+		<if test="condition == 'content'">
+		 WHERE
+				BOARD_CONTENT LIKE '%'||#{keyword}||'%'
+		</if>
+		 ORDER
+		    BY
+		<if test="order == 'recent'">
+		    	"create_date" DESC
+		</if>
+		<if test="order == 'like'">
+				BOARD_LIKE DESC
+		</if>
+		<if test="order == 'count'">
+				COUNT DESC
+		</if>
+	</select>
+	
+	<select id="selectBoard" resultMap="boardResultSet">
+		select
+		       board_no
+		      ,board_title
+		      ,board_content
+		      ,to_char(create_date, 'YYYY-MM-DD') as "create_date"
+		      ,count
+		      ,board_type
+		      ,board_writer
+		      ,board_like
+		  from
+		       board
+		 where
+		       status = 'Y'
+		   and
+		       board_no = #{boardNo}
+	</select>
+	
+	<update id="increaseCount">
+		update
+		       board
+		   set
+		       count = count + 1
+		 where
+		       board_no = #{boardNo}
+		   and
+		       status='Y'	
+	</update>
+	
+	<insert id="insertBoard" parameterType="board">
+		insert
+		  into
+		       board 
+		       (
+				 BOARD_NO
+				,BOARD_TYPE
+				,BOARD_TITLE
+				,BOARD_CONTENT
+				,CREATE_DATE
+				,MODIFY_DATE
+				,THUMBNAIL
+				,RECRUIT_YN
+				,COUNT
+				,STATUS
+				,MEM_NO
+				,BOARD_WRITER
+				,BOARD_LIKE
+		       )
+		values
+		       (
+		       seq_bno.nextval
+		      ,#{boardType}
+		      ,#{boardTitle}
+		      ,#{boardContent}
+		      ,sysdate
+		      ,#{modifyDate}
+		      ,#{thumbnail}
+		      ,#{recruitYN}
+		      ,0
+		      ,'Y'
+		      ,#{memNo}
+		      ,#{boardWriter}
+		      ,0
+		       )
+	</insert>
+	
+	<select id="selectAttachmentDetailBoard" parameterType="board" resultMap="attachmentResultSet">
+		SELECT
+			   *
+		  FROM
+			   ATTACHMENT
+		 WHERE 
+		   	   BOARD_NO=#{boardNo} 
+		   AND 
+		       BOARD_TYPE=#{boardType}
+	</select>
+	
+	<select id="attachmentSelectList" resultMap="attachmentResultSet">
+	
+		SELECT board_no,
+		            file_no,
+		            origin_name,
+		            change_name,
+		            upload_date
+		   FROM (
+		        SELECT 
+		            board_no,
+		            file_no,
+		            origin_name,
+		            change_name,
+		            upload_date,
+		            board_type,
+		            ROW_NUMBER() OVER (PARTITION BY board_no ORDER BY file_no) AS RN
+		        FROM 
+		            ATTACHMENT) a
+		WHERE 
+				a.RN = 1
+		  AND
+		        board_type='S'
+	
+	</select>
+	
+	<update id="updateBoard" parameterType="board">
+		UPDATE
+			   board
+		   SET
+		       board_title=#{boardTitle},
+		       board_content=#{boardContent},
+		       modify_date=#{modifyDate}
+		 WHERE
+		       board_no=#{boardNo}
+		   AND
+		       board_type=#{boardType}
+	</update>
+	<update id="updateAttachment" parameterType="attachment">
+	   UPDATE
+			  attachment
+	      SET
+			  origin_name = #{originName},
+			  change_name = #{changeName}
+	    WHERE
+			  board_no=#{boardNo}
+		  AND
+		      board_type=#{boardType}
+	</update>
+	
+	<!-- 게시글 삭제 -->
+	<update id="deleteBoard" parameterType="board">
+		update	   
+		  	   board
+		   set
+		   	   status='N'
+		 where
+		       board_no=#{boardNo}
+	</update>
+	
+	<insert id="insertLike" parameterType="board">
+	
+		insert 
+		  into
+				"LIKE"
+				(
+				mem_no,
+				status,
+				board_type,
+				board_no
+				)
+				
+				values
+				(
+				#{memNo},
+				1,
+				#{boardType},
+				#{boardNo}		
+				)
+	</insert>
+	
+	<update id="deleteLike" parameterType="board">
+		update
+		  	   "LIKE"
+		   set
+		   	   status=0
+		 where
+		 	   mem_no=#{memNo}
+		   and
+		       board_no=#{boardNo}
+	</update>
+	
+	<select id="selectLikeCount" parameterType="board" resultMap="likeResultSet">
+		select
+			   count(*)
+		  from
+		  	   "LIKE"
+		 where
+		       board_no=#{boardNo}
+		   and
+		   	   board_type=#{boardType}
+	</select>
+	
+	<select id="selectLike" parameterType="hashmap" resultType="_int">
+		select
+			   count(*)
+		  from
+		  	   "LIKE"
+		 where 	
+		 	   mem_no=#{memNo}
+		   and
+		   	   board_no=#{boardNo}
+		   and
+		   	   board_type=#{boardType}
+		   and
+		   	   status=1
+	</select>
+	
+	<update id="increaseLike" parameterType="board">
+		update
+			   BOARD
+		   set
+		   	   board_like=board_like+1
+		 where
+		 	   board_no=#{boardNo}
+		   and
+		   	   board_type=#{boardType}
+	</update>
+	<update id="decreaseLike" parameterType="board">
+		update
+			   BOARD
+		   set
+		   	   board_like=board_like-1
+		 where
+		 	   board_no=#{boardNo}
+		   and
+		   	   board_type=#{boardType}
+	</update>
+	
+	<!-- 미완성 -->
+	<select id="selectReplyList" resultType="comment">
+		select 
+			   COMMENT_NO commentNo,
+			   COMMENT_CONTENT commentContent,
+			   c.ENROLL_DATE commentEnrollDate,
+			   BOARD_TYPE boardType,
+			   BOARD_NO boardNo,
+			   m.MEM_ID memId
+		  from
+		       "COMMENT" c
+		  join
+		  		Member m
+		    on
+		       m.MEM_NO=c.MEM_NO	
+		 where
+		       status = 'Y'
+		   and
+		       board_no = #{boardNo}
+		 order
+		    by
+		       comment_no desc
+	</select>
+	
+	<insert id="insertReply" parameterType="comment">
+		insert
+		  into
+		       "COMMENT"
+		       (
+				COMMENT_NO
+				,COMMENT_CONTENT
+				,ENROLL_DATE
+				,BOARD_TYPE
+				,BOARD_NO
+				,MEM_NO
+				,STATUS
+		       )
+		values
+		       (
+		       SEQ_CNO.nextval
+		       ,#{commentContent}
+		       ,sysdate
+		       ,#{boardType}
+		       ,#{boardNo}
+		       ,#{memNo}
+		       ,'Y'
+		       )
+	</insert>
+
+
+
+
+</mapper>
