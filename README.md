@@ -1,70 +1,84 @@
 # 🌿농부심 - 농부의 마음
 
-![%F0%9F%8C%BF%E1%84%82%E1%85%A9%E1%86%BC%E1%84%87%E1%85%AE%E1%84%89%E1%85%B5%E1%86%B7%20-%20%E1%84%82%E1%85%A9%E1%86%BC%E1%84%87%E1%85%AE%E1%84%8B%E1%85%B4%20%E1%84%86%E1%85%A1%E1%84%8B%E1%85%B3%E1%86%B7%20cfa81f2114b34ad7bb10e0a7f1940f05/Line_1_(1).png](%F0%9F%8C%BF%E1%84%82%E1%85%A9%E1%86%BC%E1%84%87%E1%85%AE%E1%84%89%E1%85%B5%E1%86%B7%20-%20%E1%84%82%E1%85%A9%E1%86%BC%E1%84%87%E1%85%AE%E1%84%8B%E1%85%B4%20%E1%84%86%E1%85%A1%E1%84%8B%E1%85%B3%E1%86%B7%20cfa81f2114b34ad7bb10e0a7f1940f05/Line_1_(1).png)
 
-# **프로젝트 개요**
+## 🖥️ 프로젝트 소개
+
+농부들의 자부심 **"농부심"**
+- 지역농부간 소통 +  지역농부와 지역소비자 연결을 위한 Web 플랫폼
+
+    ◦  농부간 정보공유 / 소통을 위한 기능 제공 
+
+    ◦  농부 개인을 위한 기능 제공 ( 농작물입출금내역 / 영농일지)
+
+    ◦  농장체험 프로그램 및 지역농산물 거래 중개
+
+	→  유저구분( 농부 / 일반) 을 통한 상이한 기능 제공
+
+<img src="https://github.com/fara2828/my-nongbushim/assets/121650362/7d3d78f6-64a9-4267-a3bc-24b0a8801157" width="60%" height="60%">
+
+## 🗓 개발 기간
+22.12.30 - 23.01.25
+
+
+## 🧑‍🤝‍🧑 팀원
+- 이상민: 통합 검색기능 (추천검색어, 게시판 전체검색) , 마이페이지(농부) - 영농일지(CRUD) , 입출금관리(CRUD)
+- 서지연: 로그인, 로그아웃, 회원가입, 마이페이지(정보수정, 작성글조회, 찜 관리)
+- 송누리: 농장 전체 리스트(지역별, 키워드 검색), 농장 상세 조회 페이지, 정보 공유 게시판(CRUD), 농장 정보 등록/수정/삭제
+- 이영준: 프로그램 전체 리스트, 프로그램등록(농부만), 프로그램상세조회(회원 신청), 참여프로그램 조회, 프로그램 후기 게시판
+- 김승혜: 농작물 거래 게시판(CRUD), 비밀댓글
+- 황승필: 파머게시판(CRUD)-내농작물자랑, 질문게시판, 멘토멘티구하기, 농사노하우공유게시판
+
+
+
+
+
+# ⚙️ Tech Stack
+
+- Back-end:
+  <div>
+     <img src="https://img.shields.io/badge/Java-007396?style=flat&logo=Java&logoColor=white" />
+     <img src="https://img.shields.io/badge/Spring-6DB33F?style=flat-square&logo=Spring&logoColor=white"/>
+  </div>  
+- DB:
+  <div>    
+    <img src="https://img.shields.io/badge/ORACLE-F80000?style=flat-square&logo=oracle&logoColor=white"/>
+    <img src="https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=MySQL&logoColor=white"/>
+    <img src="https://img.shields.io/badge/Mybatis-purple?style=flat-square&logo=Mybatis&logoColor=red"/>
+  </div>
+- Front-end:
+  <div>
+    <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black"/>
+  </div>
+- Others:
+  <div>
+   <img src="https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=HTML5&logoColor=white" />
+   <img src="https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=CSS3&logoColor=white" />
+   <img src="https://img.shields.io/badge/jQuery-0769AD?style=flat-square&logo=jQuery&logoColor=white"/>
+   <img src="https://img.shields.io/badge/Apache Tomcat-F8DC75?style=flat-square&logo=apachetomcat&logoColor=white">  
+  </div>    
 
 ---
+<img src="https://github.com/fara2828/my-nongbushim/assets/121650362/b7bd7ed2-025a-4547-ad69-88c276fd2d2e" width="60%" height="60%">>
 
-1. 요  약:   
-
-      - 지역농부간 소통 +  지역농부와 지역소비자 연결을 위한 Web 플랫폼
-
-      ◦  농부간 정보공유 / 소통을 위한 기능 제공 
-
-      ◦  농부 개인을 위한 기능 제공 ( 농작물입출금내역 / 영농일지)
-
-◦  농장체험 프로그램 및 지역농산물 거래 중개
-
-→  유저구분( 농부 / 일반) 을 통한 상이한 기능 제공
-
-1. 기  간: 2023.01.02 ~ 01.20. ( 약 3주 ) 
-2. 인  원: 총 6명
-****
-
-![Untitled](%F0%9F%8C%BF%E1%84%82%E1%85%A9%E1%86%BC%E1%84%87%E1%85%AE%E1%84%89%E1%85%B5%E1%86%B7%20-%20%E1%84%82%E1%85%A9%E1%86%BC%E1%84%87%E1%85%AE%E1%84%8B%E1%85%B4%20%E1%84%86%E1%85%A1%E1%84%8B%E1%85%B3%E1%86%B7%20cfa81f2114b34ad7bb10e0a7f1940f05/Untitled.png)
-
-# Tech Stack
-
----
-
-![Untitled](%F0%9F%8C%BF%E1%84%82%E1%85%A9%E1%86%BC%E1%84%87%E1%85%AE%E1%84%89%E1%85%B5%E1%86%B7%20-%20%E1%84%82%E1%85%A9%E1%86%BC%E1%84%87%E1%85%AE%E1%84%8B%E1%85%B4%20%E1%84%86%E1%85%A1%E1%84%8B%E1%85%B3%E1%86%B7%20cfa81f2114b34ad7bb10e0a7f1940f05/Untitled%201.png)
-
-| 구분 | 기술 |
-| --- | --- |
-| Front-end | JavaScript / jQuery / AJAX / JSP |
-| Back-end | Java / Spring Framework |
-| Database | Oracle / MyBatis |
 
 ---
 
 # 전체기능
 
----
 
-| 작업자 | 담당기능 |
-| --- | --- |
-| 이상민 | 입출금관리
+로그인, 로그아웃, 회원가입
+마이페이지(정보수정, 작성글조회, 찜 관리)
+입출금관리
 영농일지
-통합검색 (추천검색어, 게시판 전체검색)  |
-| 김승혜 | 농작물 거래 / 비밀댓글 |
-| 서지연 | 로그인, 로그아웃, 회원가입
-마이페이지(정보수정, 작성글조회, 찜 관리) |
-| 송누리 | 농장 리스트(지역별, 키워드 검색)
-농장 조회, 등록 
-정보 공유  |
-| 이영준 | 농장체험 
-농장체험 후기 |
-| 황승필 | 내농작물자랑 
-질문하기
-멘토멘티구하기
-농사노하우공유게시 |
+통합검색 (추천검색어, 게시판 전체검색)  
+농장정보 
+농장체험 프로그램 /후기
+농작물 거래 / 비밀댓글
+농부 소통공간 
 
 ※ 각자 담당 기능에 대해 Full-stack으로 구현 (DB - BE - FE)
 
 # 나의 담당기능
-
----
 
 - 입출금내역
     - 가계부 작성 / 수정 / 삭제 (CRUD)
@@ -83,66 +97,49 @@
     - 게시판 전체검색
         - 검색결과 게시판별 조회
 
----
+# 담당 파일트리
+1. Back-end
+<img src="https://github.com/fara2828/my-nongbushim/assets/121650362/e8f3dbfa-b44d-4669-99f3-35b3427c35cb"  width="20%"/>
+ 
+2. Front-end
+<img src="https://github.com/fara2828/my-nongbushim/assets/121650362/aafcb3e2-41d5-4de6-b91c-79b6a12aa68d" width="50%"/>
+    
+3. MyBatis Mapper 
+<img src="https://github.com/fara2828/my-nongbushim/assets/121650362/b7ac317e-58d7-4bc5-bc51-55de3983d916" width="40%"/>  
 
 # 시연영상
 
----
+
 
 1. 입출금내역
-    - 월별 수입 / 지출 /  합계 캘린더 조회
-    
-    [1.입출금내역 달력보기.mp4](%F0%9F%8C%BF%E1%84%82%E1%85%A9%E1%86%BC%E1%84%87%E1%85%AE%E1%84%89%E1%85%B5%E1%86%B7%20-%20%E1%84%82%E1%85%A9%E1%86%BC%E1%84%87%E1%85%AE%E1%84%8B%E1%85%B4%20%E1%84%86%E1%85%A1%E1%84%8B%E1%85%B3%E1%86%B7%20cfa81f2114b34ad7bb10e0a7f1940f05/1.%25EC%259E%2585%25EC%25B6%259C%25EA%25B8%2588%25EB%2582%25B4%25EC%2597%25AD_%25EB%258B%25AC%25EB%25A0%25A5%25EB%25B3%25B4%25EA%25B8%25B0.mp4)
-    
-    - 기간 / 카테고리별 수입 / 지출 내역 조회
-    
-    [2.입출금내역 모아보기.mp4](%F0%9F%8C%BF%E1%84%82%E1%85%A9%E1%86%BC%E1%84%87%E1%85%AE%E1%84%89%E1%85%B5%E1%86%B7%20-%20%E1%84%82%E1%85%A9%E1%86%BC%E1%84%87%E1%85%AE%E1%84%8B%E1%85%B4%20%E1%84%86%E1%85%A1%E1%84%8B%E1%85%B3%E1%86%B7%20cfa81f2114b34ad7bb10e0a7f1940f05/2.%25EC%259E%2585%25EC%25B6%259C%25EA%25B8%2588%25EB%2582%25B4%25EC%2597%25AD_%25EB%25AA%25A8%25EC%2595%2584%25EB%25B3%25B4%25EA%25B8%25B0.mp4)
-    
-    - 가계부 작성 / 수정 / 삭제 (CRUD)
-    
-    [3.입출금장부작성.mp4](%F0%9F%8C%BF%E1%84%82%E1%85%A9%E1%86%BC%E1%84%87%E1%85%AE%E1%84%89%E1%85%B5%E1%86%B7%20-%20%E1%84%82%E1%85%A9%E1%86%BC%E1%84%87%E1%85%AE%E1%84%8B%E1%85%B4%20%E1%84%86%E1%85%A1%E1%84%8B%E1%85%B3%E1%86%B7%20cfa81f2114b34ad7bb10e0a7f1940f05/3.%25EC%259E%2585%25EC%25B6%259C%25EA%25B8%2588%25EC%259E%25A5%25EB%25B6%2580%25EC%259E%2591%25EC%2584%25B1.mp4)
-    
-    [4.입출금 수정.mp4](%F0%9F%8C%BF%E1%84%82%E1%85%A9%E1%86%BC%E1%84%87%E1%85%AE%E1%84%89%E1%85%B5%E1%86%B7%20-%20%E1%84%82%E1%85%A9%E1%86%BC%E1%84%87%E1%85%AE%E1%84%8B%E1%85%B4%20%E1%84%86%E1%85%A1%E1%84%8B%E1%85%B3%E1%86%B7%20cfa81f2114b34ad7bb10e0a7f1940f05/4.%25EC%259E%2585%25EC%25B6%259C%25EA%25B8%2588_%25EC%2588%2598%25EC%25A0%2595.mp4)
-    
+- 월별 수입 / 지출 /  합계 캘린더 조회
+<img src="https://github.com/fara2828/my-nongbushim/assets/121650362/83740b66-a03f-48f1-a60c-ba7f5a852217" width="60%" height="60%">
 
----
+- 기간 / 카테고리별 수입 / 지출 내역 조회  
+<img src="https://github.com/fara2828/my-nongbushim/assets/121650362/f2f28690-a790-4046-983e-c885baa24e14"  width="60%" height="60%">
+  
+- 작성 / 수정 / 삭제 (CRUD)    
+<img src="https://github.com/fara2828/my-nongbushim/assets/121650362/7c2cbf40-aa06-4e1c-9d50-8c4accddef4d" width="60%" height="60%">
+<img src="https://github.com/fara2828/my-nongbushim/assets/121650362/d5735154-bada-4d50-b926-4cd3a4de7658" width="60%" height="60%">
+  
 
-1. 영농일지
+
+
+2. 영농일지
     - 상세기능 상동(입출금내역과 동일)
     
-    [5.영농일지달력보기.mp4](%F0%9F%8C%BF%E1%84%82%E1%85%A9%E1%86%BC%E1%84%87%E1%85%AE%E1%84%89%E1%85%B5%E1%86%B7%20-%20%E1%84%82%E1%85%A9%E1%86%BC%E1%84%87%E1%85%AE%E1%84%8B%E1%85%B4%20%E1%84%86%E1%85%A1%E1%84%8B%E1%85%B3%E1%86%B7%20cfa81f2114b34ad7bb10e0a7f1940f05/5.%25EC%2598%2581%25EB%2586%258D%25EC%259D%25BC%25EC%25A7%2580%25EB%258B%25AC%25EB%25A0%25A5%25EB%25B3%25B4%25EA%25B8%25B0.mp4)
-    
-    [6.영농일지모아보기.mp4](%F0%9F%8C%BF%E1%84%82%E1%85%A9%E1%86%BC%E1%84%87%E1%85%AE%E1%84%89%E1%85%B5%E1%86%B7%20-%20%E1%84%82%E1%85%A9%E1%86%BC%E1%84%87%E1%85%AE%E1%84%8B%E1%85%B4%20%E1%84%86%E1%85%A1%E1%84%8B%E1%85%B3%E1%86%B7%20cfa81f2114b34ad7bb10e0a7f1940f05/6.%25EC%2598%2581%25EB%2586%258D%25EC%259D%25BC%25EC%25A7%2580%25EB%25AA%25A8%25EC%2595%2584%25EB%25B3%25B4%25EA%25B8%25B0.mp4)
-    
-    [7.영농일지 작성.mp4](%F0%9F%8C%BF%E1%84%82%E1%85%A9%E1%86%BC%E1%84%87%E1%85%AE%E1%84%89%E1%85%B5%E1%86%B7%20-%20%E1%84%82%E1%85%A9%E1%86%BC%E1%84%87%E1%85%AE%E1%84%8B%E1%85%B4%20%E1%84%86%E1%85%A1%E1%84%8B%E1%85%B3%E1%86%B7%20cfa81f2114b34ad7bb10e0a7f1940f05/7.%25EC%2598%2581%25EB%2586%258D%25EC%259D%25BC%25EC%25A7%2580_%25EC%259E%2591%25EC%2584%25B1.mp4)
-    
-    [8.mp4](%F0%9F%8C%BF%E1%84%82%E1%85%A9%E1%86%BC%E1%84%87%E1%85%AE%E1%84%89%E1%85%B5%E1%86%B7%20-%20%E1%84%82%E1%85%A9%E1%86%BC%E1%84%87%E1%85%AE%E1%84%8B%E1%85%B4%20%E1%84%86%E1%85%A1%E1%84%8B%E1%85%B3%E1%86%B7%20cfa81f2114b34ad7bb10e0a7f1940f05/8.mp4)
-    
+<img src="https://github.com/fara2828/my-nongbushim/assets/121650362/9bd69cf7-5e0d-44f8-8448-8963bf566e7e" width="60%" height="60%">
+<img src="https://github.com/fara2828/my-nongbushim/assets/121650362/4c09f59d-b28e-4215-9512-1809699cc5b9" width="60%" height="60%">
+<img src="https://github.com/fara2828/my-nongbushim/assets/121650362/768a1f3b-a314-48b4-ada4-db69ffb20035" width="60%" height="60%">
+<img src="https://github.com/fara2828/my-nongbushim/assets/121650362/5f7bca2e-1e89-4ffc-8a28-86d020a16a98" width="60%" height="60%">
 
----
 
-1. 통합 검색
-    - 추천검색어
-        
-        [9. 추천키워드.mp4](%F0%9F%8C%BF%E1%84%82%E1%85%A9%E1%86%BC%E1%84%87%E1%85%AE%E1%84%89%E1%85%B5%E1%86%B7%20-%20%E1%84%82%E1%85%A9%E1%86%BC%E1%84%87%E1%85%AE%E1%84%8B%E1%85%B4%20%E1%84%86%E1%85%A1%E1%84%8B%E1%85%B3%E1%86%B7%20cfa81f2114b34ad7bb10e0a7f1940f05/9._%25EC%25B6%2594%25EC%25B2%259C%25ED%2582%25A4%25EC%259B%258C%25EB%2593%259C.mp4)
-        
-    
-    - 게시판 전체검색
-        
-        [10 전체검색.mp4](%F0%9F%8C%BF%E1%84%82%E1%85%A9%E1%86%BC%E1%84%87%E1%85%AE%E1%84%89%E1%85%B5%E1%86%B7%20-%20%E1%84%82%E1%85%A9%E1%86%BC%E1%84%87%E1%85%AE%E1%84%8B%E1%85%B4%20%E1%84%86%E1%85%A1%E1%84%8B%E1%85%B3%E1%86%B7%20cfa81f2114b34ad7bb10e0a7f1940f05/10_%25EC%25A0%2584%25EC%25B2%25B4%25EA%25B2%2580%25EC%2583%2589.mp4)
-        
+3. 통합 검색
+- 추천검색어
+<img src="https://github.com/fara2828/my-nongbushim/assets/121650362/91eb6a15-ee52-4248-9cd0-f9e52f12fc70" width="60%" height="60%">
 
-# 👩🏻‍🚀 프로젝트 회고
+- 게시판 전체검색
+<img src="https://github.com/fara2828/my-nongbushim/assets/121650362/693cf7db-eb34-4f6d-8cb8-3a80abbf0c23" width="60%" height="60%">
 
-![%F0%9F%8C%BF%E1%84%82%E1%85%A9%E1%86%BC%E1%84%87%E1%85%AE%E1%84%89%E1%85%B5%E1%86%B7%20-%20%E1%84%82%E1%85%A9%E1%86%BC%E1%84%87%E1%85%AE%E1%84%8B%E1%85%B4%20%E1%84%86%E1%85%A1%E1%84%8B%E1%85%B3%E1%86%B7%20cfa81f2114b34ad7bb10e0a7f1940f05/Line_1_(1).png](%F0%9F%8C%BF%E1%84%82%E1%85%A9%E1%86%BC%E1%84%87%E1%85%AE%E1%84%89%E1%85%B5%E1%86%B7%20-%20%E1%84%82%E1%85%A9%E1%86%BC%E1%84%87%E1%85%AE%E1%84%8B%E1%85%B4%20%E1%84%86%E1%85%A1%E1%84%8B%E1%85%B3%E1%86%B7%20cfa81f2114b34ad7bb10e0a7f1940f05/Line_1_(1).png)
 
-## 학습 내용
 
-- SpringMVC의 전반적인 동작과정을 알게되었다.
-    - MVC패턴에 따른 관심사의 분리를 이해하게 되었다.
-    - DispatcherServlet을 통한 Spring의 동작과정을 이해하게 되었다.
-    - DI / IoC / AOP의 기본 개념에 대해 이해하게 되었다.
-- HTTP 통신 메소드 중 **GET방식과 POST방식의 차이점 및 장단점**에 따라 알맞는 메소드를 사용하였다.
-- SQL Mapper Framework를 활용하여 동적 쿼리문을 생성할 수 있다.
-
----
