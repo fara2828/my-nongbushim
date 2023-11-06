@@ -34,7 +34,7 @@
 
 
 
-# ⚙️ Tech Stack
+## ⚙️ Tech Stack
 
 - Back-end:
   <div>
@@ -60,14 +60,23 @@
   </div>    
 
 ---
-<img src="https://github.com/fara2828/my-nongbushim/assets/121650362/b7bd7ed2-025a-4547-ad69-88c276fd2d2e" width="60%" height="60%">>
+<img src="https://github.com/fara2828/my-nongbushim/assets/121650362/b7bd7ed2-025a-4547-ad69-88c276fd2d2e" width="60%" height="60%">
 
 
 ---
 
+## ⭐️ Usecase Diagram
+
+<img src="https://github.com/fara2828/go-for-it/assets/121650362/97831728-6a2f-40a9-b8f8-736b3481d956" width="60%" height="60%">
+
+## 👉 ERD 
+
+<img src="https://github.com/fara2828/my-nongbushim/assets/121650362/9003e5b6-82f4-4fb6-894a-653fd783bc2e" width="60%" height="60%">
+
+## 📚 요구사항 명세서
 
 
-# 나의 담당기능
+## 나의 담당기능
   **※ 담당 기능 Full-stack으로 구현 (DB - BE - FE)**
 
 
@@ -75,9 +84,9 @@
     - 가계부 작성 / 수정 / 삭제 (CRUD)
         - 다중 첨부파일
     - 월별 수입 / 지출 /  합계 캘린더 조회
-        - 사용자 입력 Data를 달력 시각화하여 조회 (FullCalendar API)
+        - 사용자 입력 Data를 달력 시각화하여 조회 (FullCalendar Library)
     - 기간 / 카테고리별 수입 / 지출 내역 조회
-        - 엑셀 다운로드 (SheetJS)
+        - 엑셀 다운로드 (SheetJS Library)
 - 영농일지
     - 상세기능 상동(입출금내역과 동일)
     
@@ -88,7 +97,7 @@
     - 게시판 전체검색
         - 검색결과 게시판별 조회
 
-# 담당 파일트리
+## 담당 파일트리
 1. Back-end
 <img src="https://github.com/fara2828/my-nongbushim/assets/121650362/e8f3dbfa-b44d-4669-99f3-35b3427c35cb"  width="20%"/>
  
@@ -98,7 +107,7 @@
 3. MyBatis Mapper 
 <img src="https://github.com/fara2828/my-nongbushim/assets/121650362/b7ac317e-58d7-4bc5-bc51-55de3983d916" width="40%"/>  
 
-# 시연영상
+## 🖥 시연영상
 
 
 
