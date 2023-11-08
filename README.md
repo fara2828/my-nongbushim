@@ -67,7 +67,7 @@
 
 ## ⭐️ Usecase Diagram
 
-<img src="https://github.com/fara2828/go-for-it/assets/121650362/97831728-6a2f-40a9-b8f8-736b3481d956" width="60%" height="60%">
+<img src="https://github.com/fara2828/my-nongbushim/assets/121650362/5e49cd5e-5623-4cd3-9ad5-c539b17e53de)" width="60%" height="60%">
 
 ## 👉 ERD 
 
